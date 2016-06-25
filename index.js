@@ -1,6 +1,3 @@
-
-
-
 var randomColors = ['#5F9EA0', '#6495ED', '#A9A9A9', '#BDB76B', ' #DCDCDC', '#778899', '#9370DB'];  
 
 window.onload = function() {
@@ -43,10 +40,12 @@ window.onload = function() {
       if(keyA.start > keyB.start) return 1;
       return 0;
   });
-  calculatePositions(meetings)
 
-  // var posArray = calculatePositions(meetings);
-  // createDivs(posArray);
+  // TASK 1: return the postions.
+  var posArray = calculatePositions(meetings);
+
+  // TASK 2: render the UI.
+  createDivs(posArray);
 
 };
 
@@ -54,14 +53,13 @@ window.onload = function() {
 function calculatePositions(arrMeeting) {
   	var arrLength = arrMeeting.length;
   	var posArray = [];
-  	var i, 
-        j, 
-        k,
-        x, 
+  	var i, j, k, x, y, z,
         widthRatio, 
         startElem, 
         currentCounter,
+        rLength,
         groupCounter;
+    var finalArray = [];
     var resultArray = [];
     var resultObj = {};
     var resultObj2 = {};
@@ -151,8 +149,9 @@ function calculatePositions(arrMeeting) {
                 }
 
                 else {
+                    // handling a non-overlapping meeting.
                     if(posArray[k]) {
-                       resultObj = {};
+                        resultObj = {};
                         resultObj.posArray = [];
                         resultObj.posArray.push(posArray[startElem])
                         resultObj.groupCounter = 0;
@@ -160,84 +159,52 @@ function calculatePositions(arrMeeting) {
                     }
                 }
                 k++;
-                renderSpaceOptimizedDivs(resultArray)
-                
+                rLength = resultArray.length;
+
+                // pushing the elements to the final array.
+                for(y = 0; y < rLength; y++) {
+                    var pArray = resultArray[y].posArray;
+                    var pArrayLength = pArray.length;
+                    for(z = 0; z < pArrayLength; z++) {
+                        pArray[z].width = 600/rLength;
+                        pArray[z].left = (600/rLength) * y;
+                        finalArray.push(pArray[z]);
+                    }
+                }
                 currentCounter = 1;
                 widthRatio = 1;
                 startElem = k;
             }
-
         }
-    		// return posArray;
+    		return finalArray;
   	}
   	else {
-        // return posArray;
+        return finalArray;
     		alert("please enter meetings.");
   	}
 }
 
-// fuction to create divs with optimized space.
-function renderSpaceOptimizedDivs(resultArray) {
+// fuction to create divs with respect to the given data.
+function createDivs(posArray) {
     var i,
-        j,
         div,
         color,
         div;
-    var resultArrayLength = resultArray.length;
-    for (j = 0; j < resultArrayLength; j++) {
-        var posArray = resultArray[j].posArray;
-        var posArrayLength = posArray.length;
-        for(i = 0; i < posArrayLength; i++) {
-            // assign random color.
-            color = randomColors[Math.floor(Math.random() * randomColors.length)];
-            div = document.createElement('div')
-            $(div).prop('id', posArray[i].id);
-            $(div).append('<p>'+posArray[i].id+'</p>')
-            $(div).prop('class', "innerContainer");
-            $(div).css("background-color", color);
-            // finding width with respect to number of groups
-            width = (600/resultArrayLength);
-            $(div).css("width", width + "px");
-            $(div).css("height", posArray[i].height + "px");
-            $(div).css("top", posArray[i].top + "px");
-            //incrementing left.
-            $(div).css("left", (j * width) + "px");
-            $(div).css("line-height", posArray[i].height + "px");
-            // $(div).css("position", "absolute");
-            $('.outerContainer').append(div)
-        }
-        
-        
+    var posArrayLength = posArray.length;
+    for (i = 0; i < posArrayLength; i++) {
+        color = randomColors[Math.floor(Math.random() * randomColors.length)];
+        div = document.createElement('div')
+        $(div).prop('id', posArray[i].id);
+        $(div).append('<p>'+posArray[i].id+'</p>')
+        $(div).prop('class', "innerContainer");
+        $(div).css("background-color", color);
+        $(div).css("width", posArray[i].width + "px");
+        $(div).css("height", posArray[i].height + "px");
+        $(div).css("top", posArray[i].top + "px");
+        $(div).css("left", posArray[i].left + "px");
+        $(div).css("line-height", posArray[i].height + "px");
+        $('.outerContainer').append(div)
     }
 
 }
-
-// fuction to create divs with respect to the given data.
-// function createDivs(posArray) {
-//     var i,
-//         j,
-//         div,
-//         color,
-//         div;
-//     var posArrayLength = posArray.length;
-//     for (i = 0; i < posArrayLength; i++) {
-//         color = randomColors[Math.floor(Math.random() * randomColors.length)];
-
-//         div = document.createElement('div')
-//         $(div).prop('id', posArray[i].id);
-//         $(div).append('<p>'+posArray[i].id+'</p>')
-//         $(div).prop('class', "innerContainer");
-//         $(div).css("background-color", color);
-//         width = posArray[i].width + "px";
-//         $(div).css("width", posArray[i].width + "px");
-//         $(div).css("height", posArray[i].height + "px");
-//         $(div).css("top", posArray[i].top + "px");
-//         $(div).css("left", posArray[i].left + "px");
-//         $(div).css("line-height", posArray[i].height + "px");
-//         // $(div).css("position", "absolute");
-//         $('.outerContainer').append(div)
-        
-//     }
-
-// }
 
