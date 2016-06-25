@@ -1,0 +1,22 @@
+.outerContainer {
+    position: relative;
+    width: 601px;
+    min-height: 1440px;
+    border: 1px solid #eee;
+    margin: 5px;
+    background: #f5f5f5;
+}
+
+.innerContainer {
+	/*background: blue;*/
+	opacity: 0.8;
+	position: absolute;
+	border: 1px solid black;
+	color: green;
+}
+
+.innerContainer p {
+	text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+}
